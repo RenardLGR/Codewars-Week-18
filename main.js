@@ -1,0 +1,316 @@
+const hi = 'HELLO'
+
+// https://www.codewars.com/kata/56f253dd75e340ff670002ac/train/javascript
+// A squared string is a string of n lines, each substring being n characters long. We are given two n-squared strings. For example:
+
+// s1 = "abcd\nefgh\nijkl\nmnop" s2 = "qrst\nuvwx\nyz12\n3456"
+
+// Let us build a new string strng of size (n + 1) x n in the following way:
+
+// The first line of strng has the first char of the first line of s1 plus the chars of the last line of s2.
+// The second line of strng has the first two chars of the second line of s1 plus the chars of the penultimate line of s2 except the last char
+// and so on until the nth line of strng has the n chars of the nth line of s1 plus the first char of the first line of s2.
+// Calling this function compose(s1, s2) we have:
+
+// compose(s1, s2) -> "a3456\nefyz1\nijkuv\nmnopq"
+// or printed:
+// abcd    qrst  -->  a3456 // fist char first line + last line
+// efgh    uvwx       efyz1 // first 2 char second line + last line - last char
+// ijkl    yz12       ijkuv // etc
+// mnop    3456       mnopq // etc
+
+function compose(s1, s2) {
+    let lineS1 = s1.split('\n')
+    let lineS2 = s2.split('\n')
+    let strng = ''
+
+    for(let i=0 ; i<lineS1.length ; i++) {
+        let left = lineS1[i].slice(0 , i+1)
+        let right = lineS2[lineS2.length-i-1].slice(0, lineS2[i].length-i)
+
+        strng += left+right+'\n'
+    }
+    return strng.slice(0, -1) //get rid of last \n
+}
+
+//console.log(compose("abcd\nefgh\nijkl\nmnop", "qrst\nuvwx\nyz12\n3456"));
+
+//=================================================================================
+//https://www.codewars.com/kata/58ce8725c835848ad6000007/train/javascript
+// All we eat is water and dry matter.
+
+// Let us begin with an example:
+
+// John bought potatoes: their weight is 100 kilograms. Potatoes contain water and dry matter. The water content is 99 percent of the total weight. He thinks they are too wet and puts them in an oven - at low temperature - for them to lose some water.
+
+// At the output the water content is only 98%.
+
+// What is the total weight in kilograms (water content plus dry matter) coming out of the oven?
+
+// He finds 50 kilograms and he thinks he made a mistake: "So much weight lost for such a small change in water content!"
+
+// Can you help him?
+
+// Task
+// Write function potatoes with
+
+// int parameter p0 - initial percent of water-
+// int parameter w0 - initial weight -
+// int parameter p1 - final percent of water -
+// potatoesshould return the final weight coming out of the oven w1 truncated as an int.
+
+// Example:
+// potatoes(82, 127, 80) => 114
+// potatoes(93, 129, 91) => 100
+
+function potatoes(p0, w0, p1) {
+    let dryMatterWeight = w0*(100-p0) //initial weight multiplied by dry percentage
+    // let w1 be the final mass, we know w1 equal to dry matter + wet matter   i.e. :
+    // w1 = dryMatterWeight + p1*w1 <=>
+    // w1 = dryMatterWeight / (100 - p1)
+
+    return Math.floor(w0 * (100 - p0) / (100 - p1))
+ }
+
+// console.log(potatoes(82, 127, 80));
+// console.log(potatoes(93, 129, 91));
+
+//================================================================================
+// https://www.codewars.com/kata/5b45e4b3f41dd36bf9000090/train/javascript
+// Guess the Sequence
+// You have read the title: you must guess a sequence. It will have something to do with the number given.
+
+// Example
+// x = 16
+// sequence(16)
+// result = [1, 10, 11, 12, 13, 14, 15, 16, 2, 3, 4, 5, 6, 7, 8, 9]
+
+// const x = 7
+// sequence(7)
+// const result = [1, 2, 3, 4, 5, 6, 7]
+
+// const x = 22
+// sequence(22)
+// const result = [1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 20, 21, 22, 3, 4, 5, 6, 7, 8, 9]
+
+function sequence(x) {
+    let result=[]
+
+    for(let i=1 ; i<=9 ; i++) {
+        if(i<=x) result.push(i)
+        for(let j=i*10 ; j<(i+1)*10 ; j++) {
+            if(j<=x) {
+                result.push(j)
+            }
+        }
+    }
+
+    return result
+}
+
+function sequenceBis(x) {
+    let array = [];
+    for (let i = 1; i <= x; i++) array.push(i);
+    return array.sort();
+}
+
+// console.log(sequence(9));
+// console.log(sequence(16));
+// console.log(sequence(62));
+
+//===============================================================================
+// https://www.codewars.com/kata/605f5d33f38ca800322cb18f/train/javascript
+// Tap Code Translation
+// Tap code is a way to communicate using a series of taps and pauses for each letter. In this kata, we will use dots . for the taps and whitespaces for the pauses.
+
+// The number of taps needed for each letter matches its coordinates in the following polybius square (note the c/k position). Then you "tap" the row, a pause, then the column. Each letter is separated from others with a pause too.
+
+//    1  2  3  4  5
+// 1  A  B C\K D  E
+// 2  F  G  H  I  J
+// 3  L  M  N  O  P
+// 4  Q  R  S  T  U
+// 5  V  W  X  Y  Z
+// Input:
+// A lowercase string of a single word (no whitespaces or punctuation, only letters).
+
+// Output:
+// The encoded string as taps and pauses.
+
+// Examples
+// text = "dot"
+//   "D" = (1, 4) = ". ...."
+//   "O" = (3, 4) = "... ...."
+//   "T" = (4, 4) = ".... ...."
+  
+// output: ". .... ... .... .... ...."
+
+
+// "example" -> ". ..... ..... ... . . ... .. ... ..... ... . . ....."
+// "more"    -> "... .. ... .... .... .. . ....."
+
+function tapCodeTranslation(text) {
+    let thisAlpha = 'abcdefghijlmnopqrstuvwxyz' //k is missing
+    arrText = text.split('').map(el => el==='k' ? 'c': el) //replace all k with a c
+
+    let alphaVectors = []
+    for(let i=1 ; i<=5 ;i++) {
+        for(let j=1 ; j<=5 ;j++ ) {
+            alphaVectors.push([i,j])
+        }
+    } //create a 25 elements long array of the vector of each letters of this alphabet
+
+    // console.log(alphaVectors[thisAlpha.indexOf('d')]);
+    // console.log(alphaVectors[thisAlpha.indexOf('o')]);
+    // console.log(alphaVectors[thisAlpha.indexOf('t')]);
+
+    let strDots = ''
+    for(let letter of arrText) {
+        let left='.'.repeat(alphaVectors[thisAlpha.indexOf(letter)][0])
+        let right='.'.repeat(alphaVectors[thisAlpha.indexOf(letter)][1])
+        strDots+= left + ' ' + right +' '
+    }
+
+    return strDots.slice(0, -1) //remove last space
+}
+
+//best answer created an object with letters and their corresponding dots string
+
+//console.log(tapCodeTranslation('kastor'));
+
+//===============================================================================
+// https://www.codewars.com/kata/59a1ea8b70e25ef8e3002992/train/javascript
+// You will be given the number of angles of a shape with equal sides and angles, and you need to return the number of its sides, and the measure of the interior angles.
+
+// Should the number be equal or less than 2, return:
+
+// "this will be a line segment or a dot"
+// Otherwise return the result in the following format:
+
+// "This shape has s sides and each angle measures d"
+// (replace s with number of sides and d with the measure of the interior angles).
+
+// Angle measure should be floored to the nearest integer.
+
+// Number of sides will be tested from 0 to 180.
+
+function describeTheShape( angles ){
+    if(angles<=2) {
+        return 'this will be a line segment or a dot'
+    }else {
+        let d = Math.floor(180-360/angles)
+        return `This shape has ${angles} sides and each angle measures ${d}`
+    }
+}
+
+//================================================================================
+// https://www.codewars.com/kata/5f8341f6d030dc002a69d7e4/train/javascript
+// Given an array of numbers and an index, return either the index of the smallest number that is larger than the element at the given index, or -1 if there is no such index ( or, where applicable, Nothing or a similarly empty value ).
+
+// Notes
+// Multiple correct answers may be possible. In this case, return any one of them.
+// The given index will be inside the given array.
+// The given array will, therefore, never be empty.
+
+// Example
+// leastLarger( [4, 1, 3, 5, 6], 0 )  =>  3
+// leastLarger( [4, 1, 3, 5, 6], 4 )  => -1
+
+function leastLarger(a,i) {
+    let value = a[i]
+    let res=-1
+
+    let sorted = a.slice().sort((a,b)=>a-b)
+
+    for (let j=0 ; j<sorted.length ; j++) {
+        if(sorted[j]>value) return a.indexOf(sorted[j]) //index of the smallest number larger than a[i]
+    }
+    return res
+}
+
+// console.log(leastLarger( [4, 1, 3, 5, 6], 0 ));
+// console.log(leastLarger( [1, 3, 5, 2, 4], 0 ));
+
+//===============================================================================
+// https://www.codewars.com/kata/559590633066759614000063/train/javascript
+// Ben has a very simple idea to make some profit: he buys something and sells it again. Of course, this wouldn't give him any profit at all if he was simply to buy and sell it at the same price. Instead, he's going to buy it for the lowest possible price and sell it at the highest.
+
+// Task
+// Write a function that returns both the minimum and maximum number of the given list/array.
+
+// Examples
+// minMax([1,2,3,4,5])   == [1,5]
+// minMax([2334454,5])   == [5, 2334454]
+// minMax([1])           == [1, 1]
+// Remarks
+// All arrays or lists will always have at least one element, so you don't need to check the length. Also, your function will always get an array or a list, you don't have to check for null, undefined or similar.
+
+function minMax(arr){
+    let min = Math.min(...arr)
+    let max = Math.max(...arr)
+
+    return [min, max]
+}
+
+//==============================================================================
+// Your task is to determine how many files of the copy queue you will be able to save into your Hard Disk Drive. The files must be saved in the order they appear in the queue.
+
+// Input:
+// Array of file sizes (0 <= s <= 100)
+// Capacity of the HD (0 <= c <= 500)
+// Output:
+// Number of files that can be fully saved in the HD.
+// Examples:
+// save([4,4,4,3,3], 12) -> 3
+// # 4+4+4 <= 12, but 4+4+4+3 > 12
+// save([4,4,4,3,3], 11) -> 2
+// # 4+4 <= 11, but 4+4+4 > 11
+// Do not expect any negative or invalid inputs.
+
+function save(sizes, hd) {
+    let space=0
+    let counter=0
+
+    while(space+sizes[counter] <= hd) {
+        space+=sizes[counter]
+        counter++
+    }
+    return counter
+}
+
+//==============================================================================
+// https://www.codewars.com/kata/582746fa14b3892727000c4f/train/javascript
+// You will be given an array of objects (hashes in ruby) representing data about developers who have signed up to attend the coding meetup that you are organising for the first time.
+
+// Your task is to return the number of JavaScript developers coming from Europe.
+
+// For example, given the following list:
+
+// var list1 = [
+//   { firstName: 'Noah', lastName: 'M.', country: 'Switzerland', continent: 'Europe', age: 19, language: 'JavaScript' },
+//   { firstName: 'Maia', lastName: 'S.', country: 'Tahiti', continent: 'Oceania', age: 28, language: 'JavaScript' },
+//   { firstName: 'Shufen', lastName: 'L.', country: 'Taiwan', continent: 'Asia', age: 35, language: 'HTML' },
+//   { firstName: 'Sumayah', lastName: 'M.', country: 'Tajikistan', continent: 'Asia', age: 30, language: 'CSS' }
+// ];
+// your function should return number 1. (Noah is the only JavaScript developer from Europe)
+
+// If, there are no JavaScript developers from Europe then your function should return 0.
+
+// Notes:
+
+// The format of the strings will always be Europe and JavaScript.
+// All data will always be valid and uniform as in the example above.
+
+function countDevelopers(list) {
+    let res=0
+    for (let dev of list) {
+        if(dev['continent'] === 'Europe' && dev['language']==='JavaScript') res++
+    }
+    return res
+}
+
+function countDevelopersBis(list) {
+    return list.filter(el => el.continent === 'Europe' && el.language === 'JavaScript').length
+}
+
+//=============================================================================
