@@ -1,4 +1,6 @@
 const hi = 'HELLO'
+const alphaL = 'abcdefghijklmnopqrstuvwxyz'
+const alphaU = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 // https://www.codewars.com/kata/56f253dd75e340ff670002ac/train/javascript
 // A squared string is a string of n lines, each substring being n characters long. We are given two n-squared strings. For example:
@@ -312,5 +314,95 @@ function countDevelopers(list) {
 function countDevelopersBis(list) {
     return list.filter(el => el.continent === 'Europe' && el.language === 'JavaScript').length
 }
+
+//=============================================================================
+// https://www.codewars.com/kata/595e9f258b763bc2d2000032/train/javascript
+// Groups of characters decided to make a battle. Help them to figure out what group is more powerful. Create a function that will accept 2 variables and return the one who's stronger.
+
+// Rules
+// Each character has its own power:
+//   A = 1, B = 2, ... Y = 25, Z = 26
+//   a = 0.5, b = 1, ... y = 12.5, z = 13
+// Only alphabetical characters can and will participate in a battle.
+// Only two groups to a fight.
+// Group whose total power (a + B + c + ...) is bigger wins.
+// If the powers are equal, it's a tie.
+// Examples
+// "One", "Two"  -->  "Two"
+// "ONE", "NEO"  -->  "Tie!"
+
+function battle(x, y) {
+    let xPower = 0
+    let yPower = 0
+
+    x.split('').forEach(el => {
+        if(alphaU.includes(el)) {
+            xPower+=alphaU.indexOf(el)+1
+        }else if(alphaL.includes(el)){
+            xPower+=(alphaL.indexOf(el)+1)/2
+        }
+    })
+
+    y.split('').forEach(el => {
+        if(alphaU.includes(el)) {
+            yPower+=alphaU.indexOf(el)+1
+        }else if(alphaL.includes(el)){
+            yPower+=(alphaL.indexOf(el)+1)/2
+        }
+    })
+    //could have been a reduce instead of a forEach
+
+    if(xPower>yPower) {
+        return x
+    }else if(xPower<yPower) {
+        return y
+    }else {
+        return "Tie!"
+    }
+}
+
+// console.log(battle("One","Two"));
+
+//==============================================================================
+// https://www.codewars.com/kata/5803753aab6c2099e600000e/train/javascript
+// Did you ever want to know how many days old are you? Complete the function which returns your age in days. The birthday is given in the following order: year, month, day.
+
+// For example if today is 30 November 2015 then
+
+// ageInDays(2015, 11, 1) returns "You are 29 days old"
+// The birthday is expected to be in the past.
+
+function ageInDays(year, month, day){
+    // Note that month == 1 means January (in contrast to JavaScripts Date where the month is zero based)
+    let date = new Date(year, month-1, day)
+    let today = new Date()
+    let deltaTime = today.getTime() - date.getTime() //time diff in millisec
+    deltaTime = deltaTime/1000/3600/24
+    let res = Math.floor(deltaTime)
+
+    return `You are ${res} days old`
+  }
+
+//console.log(ageInDays(2022, 5, 10));
+
+
+//================================================================================
+// https://www.codewars.com/kata/56a1c074f87bc2201200002e/train/javascript
+// Write a function that given, an array nums, returns an array containing at each index i the amount of numbers that are smaller than arr[i] to the right.
+
+// For example:
+
+// * Input [5, 4, 3, 2, 1] => Output [4, 3, 2, 1, 0]
+// * Input [1, 2, 0] => Output [1, 1, 0]
+
+function smaller(nums) {
+    let mapped = nums.map( (el,idx) => {
+        let right = nums.slice(idx)
+        return right.filter(e => e<el).length //amount of number smaller
+    })
+    return mapped
+}
+
+//console.log(smaller([5, 4, 3, 2, 1]));
 
 //=============================================================================
