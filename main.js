@@ -406,3 +406,165 @@ function smaller(nums) {
 //console.log(smaller([5, 4, 3, 2, 1]));
 
 //=============================================================================
+// https://www.codewars.com/kata/55e6f5e58f7817808e00002e/train/javascript
+// A number m of the form 10x + y is divisible by 7 if and only if x − 2y is divisible by 7. In other words, subtract twice the last digit from the number formed by the remaining digits. Continue to do this until a number known to be divisible by 7 is obtained; you can stop when this number has at most 2 digits because you are supposed to know if a number of at most 2 digits is divisible by 7 or not.
+
+// The original number is divisible by 7 if and only if the last number obtained using this procedure is divisible by 7.
+
+// Examples:
+// I  m = 371 -> 37 − (2×1) -> 37 − 2 = 35 ; thus, since 35 is divisible by 7, 371 is divisible by 7.
+
+// The number of steps to get the result is 1.
+
+// II m = 1603 -> 160 - (2 x 3) -> 154 -> 15 - 8 = 7 and 7 is divisible by 7.
+
+// III m = 372 -> 37 − (2×2) -> 37 − 4 = 33 ; thus, since 33 is not divisible by 7, 372 is not divisible by 7.
+
+// IV m = 477557101->47755708->4775554->477547->47740->4774->469->28 and 28 is divisible by 7, so is 477557101. The number of steps is 7.
+
+// Task:
+// Your task is to return to the function seven(m) (m integer >= 0) an array (or a pair, depending on the language) of numbers, the first being the last number m with at most 2 digits obtained by your function (this last m will be divisible or not by 7), the second one being the number of steps to get the result.
+
+// Forth Note:
+// Return on the stack number-of-steps, last-number-m-with-at-most-2-digits
+
+// Examples:
+// seven(371) should return [35, 1]
+// seven(1603) should return [7, 2]
+// seven(477557101) should return [28, 7]
+
+function seven(m) {
+    let counter=0
+
+    while (m>99) {
+        let strM = m.toString()
+        let lastDig = strM.slice(-1)
+        let firstDigs = strM.slice(0,-1)
+        m = +firstDigs - +lastDig*2
+
+        //m = Math.floor(m/10) - (m%10)*2;
+
+        counter++
+    }
+
+    return [m, counter]
+}
+
+// console.log(seven(371));
+// console.log(seven(477557101));
+
+
+//===============================================================================
+// https://www.codewars.com/kata/59c0b9d4cb7fb4dd41000962/train/javascript
+// You walk in a maze. You need to reach the exit through many rooms. These rooms are in a straight line.
+
+// You can only walk in the dark. Otherwise, you will be caught by the enemy.
+
+// Your trouble is that some rooms have light bulbs. If the light bulb is bright when you enter the room. You were caught by the enemy.
+
+// Fortunately, the status of these bulbs (on/off) is aoto-switched every minute. So you have a chance to go through the maze.
+
+// Task
+// Let's us use a string map to represent these rooms， like this: "xo oxox".
+
+// "x" means there is a bulb in the room, and its initial status is off;
+
+// "o" means there is a bulb in the room, and its initial status is on;
+
+// " "(space) means a room without bulb, it's always dark.
+
+// Your task is to determine if you can go through the maze. Return true if you can, false otherwise.
+
+// Note
+// Your initial position is the most left, the exit position is the most right.
+
+// Your moving speed is 1 minute per step. You can not stop before you start your moving until you reach the exit.
+
+// Examples
+// For map = "xo oxox". The output should be true.
+
+// step 0 :  xo oxox
+//           ^ <--------You are here
+// step 1 :  ox xoxo
+//            ^ <--------You are here
+// step 2 :  xo oxox
+//             ^ <--------You are here
+// step 3 :  ox xoxo
+//              ^ <--------You are here
+// step 4 :  xo oxox
+//               ^ <--------You are here
+// step 5 :  ox xoxo
+//                ^ <--------You are here
+// step 6 :  xo oxox
+//                 ^ <--------You are here
+// step 7 :  ox xoxo
+//                  ^ <--------You've go through the maze :)
+// For map = "xo oxox". The output should be false.
+
+// step 0 :  xo  oxox
+//           ^ <--------You are here
+// step 1 :  ox  xoxo
+//            ^ <--------You are here
+// step 2 :  xo  oxox
+//             ^ <--------You are here
+// step 3 :  ox  xoxo
+//              ^ <--------You are here
+// step 4 :  xo  oxox
+//               ^ <--------You were caught by the enemy :(
+
+function bulbMaze(map){
+    let result=true
+    let mapCpy = map.split('').slice()
+    for(let i=0 ; i<map.length ; i++){
+        if(mapCpy[i]==='o') {
+            result=false
+        }
+        mapCpy=switchLight(mapCpy)
+    }
+
+    return result
+
+    function switchLight(map) {
+        return map.map(el => {
+            if (el==='x'){return 'o'}
+            else if(el==='o') {return 'x'}
+        })
+    }
+
+}
+
+// console.log(bulbMaze("xo oxox")); //true
+// console.log(bulbMaze("xo  oxox")); //false
+
+//================================================================================
+//https://www.codewars.com/kata/619f200fd0ff91000eaf4a08/train/javascript
+// Given a number N, determine if the sum of N consecutive numbers is odd or even.
+
+// If the sum is definitely an odd number, return Odd.
+// If the sum is definitely an even number, return Even.
+// If the sum can be either odd or even ( depending on which first number you choose ), return Either.
+// Examples
+// Odd_or_Even(1) should return Either, because the sum can be odd or even.
+// Odd_or_Even(6) should return Odd, because 6 consecutive numbers contain 3 odd and 3 even numbers, so their sum is always odd.
+// Odd_or_Even(8) should return Even, because 8 consecutive numbers contain 4 odd and 4 even numbers, so their sum is always even.
+// Note
+// const ODD = "Odd";
+// const EVEN = "Even";
+// const EITHER = "Either";
+// is Preloaded.
+
+function oddOrEven(n) {
+    //It looks like if n is odd, then the answer is either
+    //But if n is even, the answer depends if n/n is odd or even (So if it is divisible by 4)
+
+    if(n%4 === 0) {
+        return 'Even'
+    }
+    else if(n%2 === 1) {
+        return 'Either'
+    }else{
+        return 'Odd'
+    }
+}
+
+//=============================================================================
