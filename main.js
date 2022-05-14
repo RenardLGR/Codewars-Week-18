@@ -568,3 +568,453 @@ function oddOrEven(n) {
 }
 
 //=============================================================================
+// https://www.codewars.com/kata/59f7fc109f0e86d705000043/train/javascript
+// A trick I learned in elementary school to determine whether or not a number was divisible by three is to add all of the integers in the number together and to divide the resulting sum by three. If there is no remainder from dividing the sum by three, then the original number is divisible by three as well.
+
+// Given a series of digits as a string, determine if the number represented by the string is divisible by three.
+
+// Example:
+
+// "123"      -> true
+// "8409"     -> true
+// "100853"   -> false
+// "33333333" -> true
+// "7"        -> false
+// Try to avoid using the % (modulo) operator.
+
+function divisibleByThree(str){
+//I sum every number and sum the result again until I end up with either 3 or 9, any other will return false
+
+    let num = str
+    while(num.length>1) {
+        let arr = num.split('')
+        num = arr.reduce( (acc, cur) => acc+ +cur , 0).toString() // +cur to get a number instead of a string :)
+    }
+    if(num === '3' || num ==='6' || num === '9') {
+        return true
+    }else {
+        return false
+    }
+}
+
+// console.log(divisibleByThree('100853'));
+// console.log(divisibleByThree('8409'));
+// console.log(divisibleByThree('123'));
+
+
+//================================================================================
+// https://www.codewars.com/kata/5500d54c2ebe0a8e8a0003fd/train/javascript
+// Find the greatest common divisor of two positive integers. The integers can be large, so you need to find a clever solution.
+
+// The inputs x and y are always greater or equal to 1, so the greatest common divisor will always be an integer that is also greater or equal to 1.
+
+function mygcd(x,y){
+    //based on euclidian algorithm
+
+    if (y === 0) {
+        return x
+    }
+    else {
+        return mygcd(y, x%y)
+    }
+}
+
+//==============================================================================
+// https://www.codewars.com/kata/562f91ff6a8b77dfe900006e
+// My friend John likes to go to the cinema. He can choose between system A and system B.
+
+// System A : he buys a ticket (15 dollars) every time
+// System B : he buys a card (500 dollars) and a first ticket for 0.90 times the ticket price, 
+// then for each additional ticket he pays 0.90 times the price paid for the previous ticket.
+// Example:
+// If John goes to the cinema 3 times:
+
+// System A : 15 * 3 = 45
+// System B : 500 + 15 * 0.90 + (15 * 0.90) * 0.90 + (15 * 0.90 * 0.90) * 0.90 ( = 536.5849999999999, no rounding for each ticket)
+// John wants to know how many times he must go to the cinema so that the final result of System B, when rounded up to the next dollar, will be cheaper than System A.
+
+// The function movie has 3 parameters: card (price of the card), ticket (normal price of a ticket), perc (fraction of what he paid for the previous ticket) and returns the first n such that
+
+// ceil(price of System B) < price of System A.
+// More examples:
+// movie(500, 15, 0.9) should return 43 
+//     (with card the total price is 634, with tickets 645)
+// movie(100, 10, 0.95) should return 24 
+//     (with card the total price is 235, with tickets 240)
+
+function movie(card, ticket, perc) {
+    let sysA = ticket //init at first ticket bought
+    let sysB = card + ticket*perc //init at first ticket bought
+    let counter = 1
+
+    while ( !(Math.ceil(sysB) < sysA) ) {
+        counter++
+        sysA+=ticket
+        sysB+=ticket * (perc**counter)
+    }
+
+    return counter
+};
+
+//console.log(movie(500, 15, 0.9));
+
+//===============================================================================
+// https://www.codewars.com/kata/5888a57cbf87c25c840000c6/train/javascript
+// Were you ever interested in the phenomena of astrology, star signs, tarot, voodoo ? (ok not voodoo that's too spooky)...
+// Task:
+// Your job for today is to finish the star_sign function by finding the astrological sign, given the birth details as a Date object.
+// Start and end dates for zodiac signs vary on different resources so we will use this table to get consistent results:
+//All day numbers are included
+
+// Aquarius ------ 21 January - 19 February
+// Pisces --------- 20 February - 20 March
+// Aries ---------- 21 March - 20 April
+// Taurus -------- 21 April - 21 May
+// Gemini -------- 22 May - 21 June
+// Cancer -------- 22 June - 22 July
+// Leo ------------- 23 July - 23 August
+// Virgo ----------- 24 August - 23 September
+// Libra ----------- 24 September - 23 October
+// Scorpio -------- 24 October - 22 November
+// Sagittarius ---- 23 November - 21 December
+// Capricorn ----- 22 December - 20 January
+
+// Test info: 100 random tests (dates range from January 1st 1940 until now)
+
+function starSign(date) {
+    let month = date.getMonth() // 0 to 11
+    let day = date.getDate() // 1 to 31
+    //getDay() gives me the day of the week btw 0 to 6
+
+    switch (month) {
+        case 0:
+            return day < 21 ? 'Capricorn' : 'Aquarius'
+            break;
+    
+        case 1:
+            return day < 20 ? 'Aquarius' : 'Pisces'
+            break;
+
+        case 2:
+            return day < 21 ? 'Pisces' : 'Aries'
+            break;
+
+        case 3:
+            return day < 21 ? 'Aries' : 'Taurus'
+            break;
+
+        case 4:
+            return day < 22 ? 'Taurus' : 'Gemini'
+            break;
+
+        case 5:
+            return day < 22 ? 'Gemini' : 'Cancer'
+            break;
+
+        case 6:
+            return day < 23 ? 'Cancer' : 'Leo'
+            break;
+
+        case 7:
+            return day < 24 ? 'Leo' : 'Virgo'
+            break;
+
+        case 8:
+            return day < 24 ? 'Virgo' : 'Libra'
+            break;
+
+        case 9:
+            return day < 24 ? 'Libra' : 'Scorpio'
+            break;
+
+        case 10:
+            return day < 23 ? 'Scorpio' : 'Sagittarius'
+            break;
+
+        case 11:
+            return day < 22 ? 'Sagittarius' : 'Capricorn'
+            break;
+
+        default:
+            break;
+    }
+}
+
+//=================================================================================
+// https://www.codewars.com/kata/58aed2cafab8faca1d000e20/train/javascript
+// You are provided with an array of positive integers and an additional integer n (n > 1).
+
+// Calculate the sum of each value in the array to the nth power. Then subtract the sum of the original array.
+
+// Examples
+// {1, 2, 3}, 3  -->  (1^3 + 2^3 + 3^3 ) - (1 + 2 + 3)  -->  36 - 6  -->  30
+// {1, 2}, 5     -->  (1^5 + 2^5) - (1 + 2)             -->  33 - 3  -->  30
+
+function modifiedSum(a, n) {
+    return a.reduce( (acc , cur) => acc + cur**n , 0 ) - a.reduce((acc , cur) => acc + cur , 0 )
+}
+
+function modifiedSumBis(a, n) {
+    return a.reduce( (acc, cur) => acc + cur**n - cur , 0)
+}
+
+//console.log(modifiedSumBis([1,2,3], 3));
+
+//===============================================================================
+// https://www.codewars.com/kata/563cf89eb4747c5fb100001b/train/javascript
+// The museum of incredible dull things wants to get rid of some exhibitions. Miriam, the interior architect, comes up with a plan to remove the most boring exhibitions. She gives them a rating, and then removes the one with the lowest rating.
+
+// However, just as she finished rating all exhibitions, she's off to an important fair, so she asks you to write a program that tells her the ratings of the items after one removed the lowest one. Fair enough.
+
+// Task
+// Given an array of integers, remove the smallest value. Do not mutate the original array/list. If there are multiple elements with the same value, remove the one with a lower index. If you get an empty array/list, return an empty array/list.
+
+// Don't change the order of the elements that are left.
+
+// Examples
+// * Input: [1,2,3,4,5], output= [2,3,4,5]
+// * Input: [5,3,2,1,4], output = [5,3,2,4]
+// * Input: [2,2,1,2,1], output = [2,2,2,1]
+
+function removeSmallest(numbers) {
+    //return numbers.filter( el => el!==Math.min(...numbers) ) // I should only remove 1 smallest
+    let result = numbers.slice()
+    result.splice( numbers.indexOf(Math.min(...numbers)) , 1)
+    return result
+}
+
+//=============================================================================
+// https://www.codewars.com/kata/563b1f55a5f2079dc100008a
+// In this Kata the aim is to compare each pair of integers from 2 arrays, and return a new array of large numbers.
+
+// Note: Both arrays have the same dimensions.
+
+// Example:
+
+// let arr1 = [13, 64, 15, 17, 88];
+// let arr2 = [23, 14, 53, 17, 80];
+// getLargerNumbers(arr1, arr2); // Returns [23, 64, 53, 17, 88]
+
+function getLargerNumbers(a, b) {
+    let result = []
+    for(let i = 0 ; i<a.length ; i++) {
+        result.push(Math.max(a[i], b[i]))
+    }
+    return result
+}
+
+//============================================================================
+// https://www.codewars.com/kata/5a58d46cfd56cb4e8600009d/train/javascript
+// Given a positive integer n, calculate the following sum:
+
+// n + n/2 + n/4 + n/8 + ...
+// All elements of the sum are the results of integer division. //Math.floor()
+
+// Example
+// n=25
+// 25  =>  25 + 12 + 6 + 3 + 1 = 47
+
+function halvingSum(n) {
+    let sum = 0
+    let idx = 0
+
+    while(Math.floor( n/(2**idx) ) > 1) {
+        //console.log(Math.floor( n/(2**idx) ));
+        sum+= Math.floor( n/(2**idx) )
+        idx++
+    }
+
+    sum++
+    return sum
+}
+
+
+//console.log(halvingSum(25));
+
+
+//===========================================================================
+// https://www.codewars.com/kata/55f8a9c06c018a0d6e000132/train/javascript
+// ATM machines allow 4 or 6 digit PIN codes and PIN codes cannot contain anything but exactly 4 digits or exactly 6 digits.
+
+// If the function is passed a valid PIN string, return true, else return false.
+
+// Examples (Input --> Output)
+// "1234"   -->  true
+// "12345"  -->  false
+// "a234"   -->  false
+
+function validatePIN (pin) {
+    //pin is a string
+    if(pin.length===4 || pin.length===6) {
+        let numbers = ['0','1','2','3','4','5','6','7','8','9']
+        return pin.split('').every(el => numbers.includes(el))
+
+    }else {
+        return false
+    }
+}
+
+//============================================================================
+// https://www.codewars.com/kata/58ca77b9c0d640ecd2000b1e/train/javascript
+// In this exercise, you will create a function that takes an integer, i. With it you must do the following:
+
+// Find all of its multiples up to and including 100,
+
+// Then take the digit sum of each multiple (eg. 45 -> 4 + 5 = 9),
+
+// And finally, get the total sum of each new digit sum.
+
+// Note: If the digit sum of a number is more than 9 (eg. 99 -> 9 + 9 = 18) then you do NOT have to break it down further until it reaches one digit.
+
+// Example (if n is 25):
+
+// Multiples of 25 up to 100 --> [25, 50, 75, 100]
+
+// Digit sum of each multiple --> [7, 5, 12, 1]
+
+// Sum of each new digit sum --> 25
+
+// If you can, try writing it in readable code.
+
+function procedure(n){
+    let multiples = []
+    let temp=n
+    while(temp <= 100) {
+        multiples.push(temp)
+        temp+=n
+    } //for n = 25 , multiples = [25, 50, 75, 100]
+
+    let sumOfEachMultiples = multiples.map(el => {
+        return el.toString().split('').reduce( (acc, digit) => acc+ +digit , 0)
+    }) // for n = 25 , sum = [7, 5, 12, 1]
+
+    return sumOfEachMultiples.reduce( (acc, curr) => acc+curr , 0)
+}
+
+//============================================================================
+// https://www.codewars.com/kata/56eb0be52caf798c630013c0/train/javascript
+
+// Friday 13th or Black Friday is considered as unlucky day. Calculate how many unlucky days are in the given year.
+
+// Find the number of Friday 13th in the given year.
+
+// Input: Year in Gregorian calendar as integer.
+
+// Output: Number of Black Fridays in the year as an integer.
+
+// Examples:
+
+// unluckyDays(2015) == 3
+// unluckyDays(1986) == 1
+
+function unluckyDays(year){
+    let res=0
+    for(let i=0 ; i<12 ; i++) {
+        let date = new Date(year, i, 13)
+        if(date.getDay() === 5) {
+            //const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]; In JS first day the week (idx = 0) is Sunday
+            res++
+        }
+
+    }
+
+    return res
+}
+
+//================================================================================
+// https://www.codewars.com/kata/554b4ac871d6813a03000035
+// In this little assignment you are given a string of space separated numbers, and have to return the highest and lowest number.
+
+// Examples
+// highAndLow("1 2 3 4 5");  // return "5 1"
+// highAndLow("1 2 -3 4 5"); // return "5 -3"
+// highAndLow("1 9 3 4 -5"); // return "9 -5"
+// Notes
+// All numbers are valid Int32, no need to validate them.
+// There will always be at least one number in the input string.
+// Output string must be two numbers separated by a single space, and highest number is first.
+
+function highAndLow(numbers){
+    let workableArr = numbers.split(' ')
+    workableArr = workableArr.map(el => Number(el))
+
+    let high = Math.max(...workableArr)
+    let low = Math.min(...workableArr)
+
+    return ''+high+' '+low
+}
+
+//console.log(highAndLow("1 2 3 4 5"));
+
+//==============================================================================
+// https://www.codewars.com/kata/5865cff66b5699883f0001aa
+// All Star Code Challenge #22
+
+// Create a function that takes an integer argument of seconds and converts the value into a string describing how many hours and minutes comprise that many seconds.
+
+// Any remaining seconds left over are ignored.
+
+// Note:
+// The string output needs to be in the specific form - "X hour(s) and X minute(s)"
+
+// For example:
+
+// 3600 --> "1 hour(s) and 0 minute(s)"
+// 3601 --> "1 hour(s) and 0 minute(s)"
+// 3500 --> "0 hour(s) and 58 minute(s)"
+
+
+function toTime(seconds) {
+    let hours = Math.floor(seconds/3600)
+    let min = Math.floor( (seconds - hours*3600) / 60)
+
+    return `${hours} hour(s) and ${min} minute(s)`
+}
+
+//===============================================================================
+// https://www.codewars.com/kata/588ac50727eb94c87700001f
+// Write
+
+// function consecutiveOnes(nums) {}
+// that takes in array nums and returns the maximum consecutive 1's
+
+// For example
+
+// consecutiveOnes([1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0]) === 3
+// consecutiveOnes([1, 1, 0, 0, 1]) === 2
+// consecutiveOnes([0, 0, 0, 0, 0]) === 0
+// PLEASE NOTE THAT THIS KATA HAS HEAVY PERFORMANCE TESTS AND YOU NEED OPTIMIZED CODE TO PASS IT
+//Idk I did a naive way, it worked
+
+
+function consecutiveOnes(nums) {
+    let result=0
+    for (let i=0 ; i<nums.length ; i++) {
+        let temp=0
+        while(nums[i]===1 && i<nums.length) {
+            temp++
+            i++
+        }
+
+        if(temp>result) {
+            result=temp
+        }
+    }
+    return result
+ };
+ 
+
+//  console.log(consecutiveOnes([1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0]));
+//  console.log(consecutiveOnes([1, 1, 1, 1, 1]));
+
+
+function consecutiveOnesBis(nums) {
+    return Math.max(...nums.join("").split("0").map(s => s.length));
+    //[1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0] -> '1100111010'
+    //-> ['11' , '111' , '1']
+    //-> [2 , 3 , 1]
+    //-> 3
+}
+
+//  console.log(consecutiveOnesBis([1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0]));
+//  console.log(consecutiveOnesBis([1, 1, 1, 1, 1]));
