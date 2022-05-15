@@ -1018,3 +1018,33 @@ function consecutiveOnesBis(nums) {
 
 //  console.log(consecutiveOnesBis([1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0]));
 //  console.log(consecutiveOnesBis([1, 1, 1, 1, 1]));
+
+//==========================================================================
+// https://www.codewars.com/kata/562e274ceca15ca6e70000d3/train/javascript
+// We want to approximate the length of a curve representing a function y = f(x) with a <= x <= b. First, we split the interval [a, b] into n sub-intervals with widths h1, h2, ... , hn by defining points x1, x2 , ... , xn-1 between a and b. This defines points P0, P1, P2, ... , Pn on the curve whose x-coordinates are a, x1, x2 , ... , xn-1, b and y-coordinates f(a), f(x1), ..., f(xn-1), f(b) . By connecting these points, we obtain a polygonal path approximating the curve.
+
+// Our task is to approximate the length of a parabolic arc representing the curve y = x * x with x in the interval [0, 1]. We will take a common step h between the points xi: h1, h2, ... , hn = h = 1/n and we will consider the points P0, P1, P2, ... , Pn on the curve. The coordinates of each Pi are (xi, yi = xi * xi).
+
+// The function len_curve (or similar in other languages) takes n as parameter (number of sub-intervals) and returns the length of the curve.
+
+
+// n numbers of intervals
+function lenCurve(n) {
+    let xCoords = []
+    for(let i=0 ; i<=n ; i++) {
+        xCoords.push(1/n * i) //creates arr of coordinates 0 , 1/n , 2/n
+    }
+    let pCoords = xCoords.map(el => el*el)
+    //console.log(pCoords);
+
+    let result = 0
+    for(let i=0 ; i<pCoords.length-1 ; i++) {
+
+        let hyp = Math.sqrt(1/n**2 + (pCoords[i] - pCoords[i+1])**2) //hyp² = base² + heightDiff² <=> (1/n)² + (Pn+1 - Pn)²
+        result += hyp
+    }
+
+    return result
+}
+
+//console.log(lenCurve(10));
